@@ -180,5 +180,16 @@ namespace Batch
 
             }//fi
         }
+
+        private void toolStripMenuItem9_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Title = "Chose one";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                FileInfo item = new FileInfo(openFileDialog1.FileName);
+                System.Diagnostics.Process.Start("cmd.exe", svd.FileName);
+            }
+
+        }
     }
 }
