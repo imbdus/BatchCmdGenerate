@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Batch
 {
@@ -187,9 +188,46 @@ namespace Batch
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 FileInfo item = new FileInfo(openFileDialog1.FileName);
-                System.Diagnostics.Process.Start("cmd.exe", svd.FileName);
+                //System.Diagnostics.Process.Start("cmd.exe", openFileDialog1.FileName);
+
+                ProcessStartInfo psi = new ProcessStartInfo("cmd.exe");
+                psi.CreateNoWindow = false;
+                psi.UseShellExecute = false;
+                psi.RedirectStandardOutput = true;
+                psi.RedirectStandardError = true;
+                psi.FileName = @openFileDialog1.FileName;
+                // Start the process
+
+                System.Diagnostics.Process proc = System.Diagnostics.Process.Start(psi);
+
+                // Attach the output for reading
+
+                System.IO.StreamReader sOut = proc.StandardOutput;
+
+                proc.Close();
+
+
+
+                // Read the sOut to a string.
+                
+                string result = sOut.ReadToEnd().Trim();
+
+                
+                sOut.Close();
+                panel1.Visible = true;
+                txtResult.Text = result;
             }
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            panel1.Visible = false;
+        }
+
+        private void toolStripMenuItem10_Click(object sender, EventArgs e)
+        {
+            panel1.Visible = true;
         }
     }
 }
